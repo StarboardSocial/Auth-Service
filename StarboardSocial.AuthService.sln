@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarboardSocial.AuthService.Server", "StarboardSocial.AuthService.Server\StarboardSocial.AuthService.Server.csproj", "{BCE62DAB-E446-4333-9921-0263AA7594EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarboardSocial.AuthService.Data", "StarboardSocial.AuthService.Data\StarboardSocial.AuthService.Data.csproj", "{6A260A8F-8BE1-4DB4-AD53-8E113EA4BF8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarboardSocial.AuthService.Domain", "StarboardSocial.AuthService.Domain\StarboardSocial.AuthService.Domain.csproj", "{67645043-C59B-4D35-8811-200BDA9089E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCE62DAB-E446-4333-9921-0263AA7594EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCE62DAB-E446-4333-9921-0263AA7594EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCE62DAB-E446-4333-9921-0263AA7594EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCE62DAB-E446-4333-9921-0263AA7594EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A260A8F-8BE1-4DB4-AD53-8E113EA4BF8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A260A8F-8BE1-4DB4-AD53-8E113EA4BF8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A260A8F-8BE1-4DB4-AD53-8E113EA4BF8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A260A8F-8BE1-4DB4-AD53-8E113EA4BF8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67645043-C59B-4D35-8811-200BDA9089E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67645043-C59B-4D35-8811-200BDA9089E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67645043-C59B-4D35-8811-200BDA9089E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67645043-C59B-4D35-8811-200BDA9089E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

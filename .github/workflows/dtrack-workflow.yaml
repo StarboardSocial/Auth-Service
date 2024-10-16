@@ -1,0 +1,45 @@
+name: DependencyTrack
+
+on:
+    workflow_call:
+
+jobs:
+    generate_bom:
+        name: Generate BOM of Project
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+
+            - name: Generate XML SBOM
+              uses: CycloneDX/gh-dotnet-generate-sbom@v1.0.1
+              with:
+                  path: ./*.sln
+
+            - name: Upload BOM to Artifacts
+              uses: actions/upload-artifact@master
+              with:
+                  name: ${{ github.repository }}_BOM_artifact
+                  path: ./bom.xml
+                  retention-days: 1
+
+    upload_bom_to_dtrack:
+        name: Upload BOM to DependencyTrack
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+
+            - uses: actions/download-artifact@master
+              with:
+                  name: ${{ github.repository }}_BOM_artifact
+                  path: ./bom.xml
+
+            - name: Upload BOM to DependencyTrack
+              uses: DependencyTrack/gh-upload-sbom@v3
+              with:
+                  serverHostname: ${{ secrets.DEPENDENCYTRACK_APIURL }}
+                  apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
+                  projectName: ${{ github.repository }}
+                  projectVersion: 'main'
+                  bomFilename: "./bom.xml"
+                  autoCreate: true
+            

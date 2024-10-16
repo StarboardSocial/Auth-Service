@@ -1,0 +1,11 @@
+name: Push-Dev-Workflow
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  sonarqube:
+    secrets: inherit
+    uses: ./.github/workflows/sonarqube-workflow.yaml
