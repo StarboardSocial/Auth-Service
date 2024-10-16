@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using RabbitMQ.Client;
+using StarboardSocial.AuthService.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,8 @@ IConnection conn = await factory.CreateConnectionAsync();
 IChannel channel = await conn.CreateChannelAsync();
 
 builder.Services.AddSingleton(channel);
+
+builder.Services.AddTransient<ITokenService, TokenService>();
 
 var app = builder.Build();
 
