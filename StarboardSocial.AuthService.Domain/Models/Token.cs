@@ -15,4 +15,7 @@ public class Token
     
     [JsonPropertyName("userId")]
     public required string UserId { get; init; }
+    
+    [JsonPropertyName("expires_at")]
+    public int ExpiresAt { get; set; }
 }

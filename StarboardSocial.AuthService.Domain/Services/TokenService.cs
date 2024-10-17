@@ -56,8 +56,10 @@ public class TokenService : ITokenService
         HttpResponseMessage response =
             await _httpClient.PostAsync("/oauth2/token", new FormUrlEncodedContent(parameters));
         
-        Token? token = await response.Content.ReadFromJsonAsync<Token>();
-        return response.IsSuccessStatusCode ? Ok(token!) : Fail("Failed to exchange token");
+        if (!response.IsSuccessStatusCode) return Fail("Failed to exchange token");
+        Token token = (await response.Content.ReadFromJsonAsync<Token>())!;
+        token.ExpiresAt = (int) DateTimeOffset.UtcNow.AddSeconds(token.ExpiresIn).ToUnixTimeSeconds();
+        return Ok(token);
     }
 
     public async Task<Result<Token>> RefreshToken(string refreshToken, string accessToken)
@@ -71,8 +73,11 @@ public class TokenService : ITokenService
         
         HttpResponseMessage response =
             await _httpClient.PostAsync("/oauth2/token", new FormUrlEncodedContent(parameters));
-        
-        Token? token = await response.Content.ReadFromJsonAsync<Token>();
-        return response.IsSuccessStatusCode ? Ok(token!) : Fail("Failed to exchange refresh token");
+
+        if (!response.IsSuccessStatusCode) return Fail("Failed to exchange refresh token");
+        Token token = (await response.Content.ReadFromJsonAsync<Token>())!;
+        token.ExpiresAt = (int) DateTimeOffset.UtcNow.AddSeconds(token.ExpiresIn).ToUnixTimeSeconds();
+        return Ok(token);
+
     }
 }
