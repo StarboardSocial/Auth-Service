@@ -1,0 +1,17 @@
+name: Push-Main-Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    
+  build_upload_image:
+    secrets: inherit
+    uses: ./.github/workflows/upload-to-registry.yaml
+    
+  deploy:
+    secrets: inherit
+    needs: build_upload_image
+    uses: ./.github/workflows/deploy-ira.yaml

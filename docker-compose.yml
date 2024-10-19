@@ -1,0 +1,25 @@
+version: "3.5"
+
+services:
+  authservice:
+    image: registry.starboardsocial.nl/authservice:prod
+    container_name: 'StarboardSocial-AuthService'
+    restart: unless-stopped
+    networks:
+      - starboardsocial_net
+    environment:
+      Rabbit__UserName: ${RABBIT_USERNAME}
+      Rabbit__Password: ${RABBIT_PASSWORD}
+      Rabbit__VirtualHost: /
+      Rabbit__HostName: rabbitmq
+      Rabbit__Port: 5672
+      Auth__AllowedCallbackDomains__0: ${AUTH_ALLOWED_CALLBACK_DOMAIN_0}
+      Auth__ClientId: ${AUTH_CLIENT_ID}
+      Auth__ClientSecret: ${AUTH_CLIENT_SECRET}
+      Auth__BaseUrl: ${AUTH_BASE_URL}
+    
+    
+networks:
+  starboardsocial_net:
+    name: starboardsocial_net
+    driver: bridge
