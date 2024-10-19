@@ -9,3 +9,7 @@ jobs:
   sonarqube:
     secrets: inherit
     uses: ./.github/workflows/sonarqube-workflow.yaml
+    
+  build_upload_image:
+    secrets: inherit
+    uses: ./.github/workflows/upload-to-registry.yaml
