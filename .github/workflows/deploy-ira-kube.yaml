@@ -1,0 +1,62 @@
+name: Deploy to IRA server using Kubernetes
+
+on:
+  workflow_call:
+    
+jobs:
+  deploy:
+    name: Deploy to IRA server using Kubernetes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_Rabbit__UserName: ${{ secrets.RABBIT_USERNAME }}
+          envkey_Rabbit__Password: ${{ secrets.RABBIT_PASSWORD }}
+          envkey_Rabbit__VirtualHost: "/"
+          envkey_Rabbit__HostName: "rabbitmq-service"
+          envkey_Rabbit__Port: "5672"
+          envkey_Auth__ClientId: ${{ secrets.AUTH_CLIENT_ID }}
+          envkey_Auth__ClientSecret: ${{ secrets.AUTH_CLIENT_SECRET }}
+          envkey_Auth__BaseUrl: ${{ secrets.AUTH_BASE_URL }}
+          envkey_Auth__AllowedCallbackDomains__0: ${{ secrets.AUTH_ALLOWED_CALLBACK_DOMAIN_0 }}
+          directory: ./
+          file_name: .env
+          fail_on_empty: false
+          sort_keys: false
+          
+      - name: Copy Kubernetes files to remote server
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./kubernetes
+          remote: /home/starboard/authservice/kubernetes
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          
+      - name: Copy .env file to remote server
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./.env
+          remote: /home/starboard/authservice/kubernetes/config.env
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          
+      - name: SSH to IRA and deploy
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /home/starboard &&
+            mkdir -p authservice/kubernetes &&
+            cd authservice/kubernetes &&
+            kubectl create configmap authservice-config --from-env-file=config.env -n starboardsocial --dry-run=client -o yaml | kubectl apply -n starboardsocial -f - &&
+            kubectl apply -f . -n starboardsocial &&
+            rm config.env

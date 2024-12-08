@@ -16,7 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // RabbitMQ Config
-/*try
+try
 {
     ConnectionFactory factory = new()
     {
@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen();
 {
     Console.WriteLine("Error connecting to RabbitMQ");
     Console.WriteLine(e.Message);
-}*/
+}
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 

@@ -481,3 +481,5 @@ FodyWeavers.xsd
 appsettings.Development.json
 
 .env
+
+kubernetes/*-config.yaml

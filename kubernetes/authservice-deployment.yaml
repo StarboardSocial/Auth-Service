@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  authservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authservice
+  template:
+    metadata:
+      labels:
+        app: authservice
+    spec:
+      containers:
+        - image:  registry.starboardsocial.nl/authservice:prod
+          imagePullPolicy: Always
+          name:  authservice
+          # resources:
+          #   requests:
+          #     memory: "64Mi"
+          #     cpu: "100m"
+          #   limits:
+          #     memory: "128Mi"
+          #     cpu: "200m"
+          ports:
+            - containerPort: 9000
+          envFrom:
+            - configMapRef:
+                name: authservice-config
+      imagePullSecrets:
+        - name: starboard-registry

@@ -11,7 +11,12 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/upload-to-registry.yaml
     
-  deploy:
+#   deploy:
+#     secrets: inherit
+#     needs: build_upload_image
+#     uses: ./.github/workflows/deploy-ira.yaml
+
+  deploy_kube:
     secrets: inherit
     needs: build_upload_image
-    uses: ./.github/workflows/deploy-ira.yaml
+    uses: ./.github/workflows/deploy-ira-kube.yaml
