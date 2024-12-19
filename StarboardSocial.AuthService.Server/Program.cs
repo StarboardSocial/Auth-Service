@@ -39,7 +39,11 @@ try
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
+
+app.MapHealthChecks("/health");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
