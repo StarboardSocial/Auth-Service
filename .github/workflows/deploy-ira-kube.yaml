@@ -23,6 +23,7 @@ jobs:
           envkey_Auth__ClientId: ${{ secrets.AUTH_CLIENT_ID }}
           envkey_Auth__ClientSecret: ${{ secrets.AUTH_CLIENT_SECRET }}
           envkey_Auth__BaseUrl: ${{ secrets.AUTH_BASE_URL }}
+          envkey_Auth__ApiKey: ${{ secrets.AUTH_API_KEY }}
           envkey_Auth__AllowedCallbackDomains__0: ${{ secrets.AUTH_ALLOWED_CALLBACK_DOMAIN_0 }}
           directory: ./
           file_name: .env

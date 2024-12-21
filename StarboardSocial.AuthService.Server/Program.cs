@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using RabbitMQ.Client;
 using StarboardSocial.AuthService.Domain.Services;
+using StarboardSocial.UserService.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,13 @@ try
     Console.WriteLine(e.Message);
 }
 
-builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddScoped<DataDeletionConsumer>();
+builder.Services.AddHostedService<DataDeletionListener>();
+
+builder.Services.AddScoped<DataDeletionHandler>();
+builder.Services.AddScoped<IDataDeletionService, DataDeletionService>();
 
 builder.Services.AddHealthChecks();
 
