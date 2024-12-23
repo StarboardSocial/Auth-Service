@@ -32,6 +32,12 @@ try
     IChannel channel = await conn.CreateChannelAsync();
 
     builder.Services.AddSingleton(channel);
+    
+    builder.Services.AddScoped<DataDeletionConsumer>();
+    builder.Services.AddHostedService<DataDeletionListener>();
+
+    builder.Services.AddScoped<DataDeletionHandler>();
+    builder.Services.AddScoped<IDataDeletionService, DataDeletionService>();
 } catch (Exception e)
 {
     Console.WriteLine("Error connecting to RabbitMQ");
@@ -40,11 +46,7 @@ try
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddScoped<DataDeletionConsumer>();
-builder.Services.AddHostedService<DataDeletionListener>();
 
-builder.Services.AddScoped<DataDeletionHandler>();
-builder.Services.AddScoped<IDataDeletionService, DataDeletionService>();
 
 builder.Services.AddHealthChecks();
 

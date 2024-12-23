@@ -12,6 +12,7 @@ public interface ITokenService
 {
     Task<Result<Token>> ExchangeToken(string code, string redirectUri);
     Task<Result<Token>> RefreshToken(string refreshToken, string accessToken);
+    Task<Result> RevokeToken(string userId);
 }
 
 
@@ -19,9 +20,14 @@ public class TokenService : ITokenService
 {
     private readonly HttpClient _httpClient;
     private readonly string[] _allowedRedirectUris;
+    private readonly string _apiKey;
+    private readonly string _tenantId;
     
     public TokenService(IConfiguration configuration)
     {
+        _apiKey = configuration["Auth:ApiKey"]!;
+        _tenantId = configuration["Auth:TenantId"]!;
+        
         _httpClient = new HttpClient();
         string baseUrl = configuration["Auth:BaseUrl"]!;
         _httpClient.BaseAddress = new Uri(baseUrl);
@@ -79,5 +85,23 @@ public class TokenService : ITokenService
         token.ExpiresAt = (int) DateTimeOffset.UtcNow.AddSeconds(token.ExpiresIn).ToUnixTimeSeconds();
         return Ok(token);
 
+    }
+
+    public async Task<Result> RevokeToken(string userId)
+    {
+        _httpClient.DefaultRequestHeaders.Add("X-FusionAuth-TenantId", _tenantId);
+        _httpClient.DefaultRequestHeaders.Remove("Authorization");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_apiKey);
+        
+        HttpResponseMessage response =
+            await _httpClient.DeleteAsync($"/api/jwt/refresh?userId={userId}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Failed to revoke refreshToken of user with id: " + userId);
+            Console.WriteLine(response);
+            return Fail("Failed to revoke refreshToken");
+        }
+        return Ok();
     }
 }

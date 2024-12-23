@@ -2,6 +2,7 @@ using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using StarboardSocial.AuthService.Domain.Models;
 using StarboardSocial.AuthService.Domain.Services;
+using StarboardSocial.UserService.Server.Helpers;
 
 namespace StarboardSocial.AuthService.Server.Controllers;
 
@@ -25,5 +26,13 @@ public class TokenController(ITokenService tokenService): ControllerBase
     {
         Result<Token> result = await _tokenService.RefreshToken(refreshToken, accessToken);
         return result.IsSuccess ? Ok(result.Value) : Unauthorized(result.Errors);
+    }
+    
+    [HttpDelete]
+    [Route("revoke")]
+    public async Task<IActionResult> RevokeToken()
+    {
+        Result result = await _tokenService.RevokeToken(UserIdHelper.GetUserId(Request));
+        return result.IsSuccess ? Ok() : Unauthorized(result.Errors);
     }
 }
